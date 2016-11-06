@@ -3,14 +3,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.ActionEvent;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import java.awt.Color;
 
 public class AlphaConverter {
 
@@ -45,23 +45,26 @@ public class AlphaConverter {
 	private void initialize() {
 		frmAlphaconverter = new JFrame();
 		frmAlphaconverter.setTitle("AlphaConverter");
-		frmAlphaconverter.setBounds(100, 100, 240, 122);
+		frmAlphaconverter.setBounds(100, 100, 278, 124);
 		frmAlphaconverter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmAlphaconverter.getContentPane().setLayout(null);
-
-		JButton btnNewButton = new JButton("Load Image");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				performPremultiply();
+				frmAlphaconverter.getContentPane().setLayout(null);
+		
+		JPanel panel = new DragPanel(){
+			@Override
+			public void performFileAction(File file) {
+				performPremultiplication(file);
+				super.performFileAction(file);
 			}
-		});
-		btnNewButton.setBounds(63, 55, 117, 25);
-		frmAlphaconverter.getContentPane().add(btnNewButton);
+		};
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(12, 12, 254, 100);
+		frmAlphaconverter.getContentPane().add(panel);
+		
+		JLabel lblDragImageHere = new JLabel("Drag Image here");
+		panel.add(lblDragImageHere);
 	}
 
-	private void performPremultiply() {
-		File image = getImage();
-
+	private void performPremultiplication(File image) {
 		if (image == null) {
 			JOptionPane.showMessageDialog(null, "No Image selected.");
 			return;
@@ -70,12 +73,12 @@ public class AlphaConverter {
 		BufferedImage buffer = readImage(image);
 
 		if (buffer == null) {
-			JOptionPane.showMessageDialog(null, "Error getting image.");
+			JOptionPane.showMessageDialog(null, "Error getting image from " + image.getName());
 			return;
 		}
 
 		if (isPremultiplied(buffer)) {
-			JOptionPane.showMessageDialog(null, "Image already premultiplied.");
+			JOptionPane.showMessageDialog(null, "Image " + image.getName() + " already premultiplied.");
 			return;
 		}
 
@@ -84,7 +87,7 @@ public class AlphaConverter {
 		writeImage(buffer, image);
 	}
 
-	private File getImage() {
+	private File getImageFromFileChooser() {
 		File selected_file;
 		JFileChooser file_chooser = new JFileChooser();
 		int file_chooser_result = 0;
