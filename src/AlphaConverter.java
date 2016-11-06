@@ -44,6 +44,7 @@ public class AlphaConverter {
 	 */
 	private void initialize() {
 		frmAlphaconverter = new JFrame();
+		frmAlphaconverter.setResizable(false);
 		frmAlphaconverter.setTitle("AlphaConverter");
 		frmAlphaconverter.setBounds(100, 100, 278, 124);
 		frmAlphaconverter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +61,7 @@ public class AlphaConverter {
 		panel.setBounds(12, 12, 254, 100);
 		frmAlphaconverter.getContentPane().add(panel);
 		
-		JLabel lblDragImageHere = new JLabel("Drag Image here");
+		JLabel lblDragImageHere = new JLabel("Drag Image(s) here");
 		panel.add(lblDragImageHere);
 	}
 
